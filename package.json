@@ -42,6 +42,8 @@
     "clui": "^0.3.6",
     "commander": "^2.15.1",
     "figlet": "^1.2.0",
+    "http-server": "^0.11.1",
+    "moment": "^2.22.2",
     "puppeteer": "^1.4.0"
   },
   "devDependencies": {

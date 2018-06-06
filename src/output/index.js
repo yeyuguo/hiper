@@ -2,6 +2,7 @@ const figlet = require('figlet')
 const clui = require('clui')
 const clc = require('cli-color')
 const Line = clui.Line
+const screenShot = require('./screenshot')
 
 module.exports = class Outputer {
   output (data) {
@@ -17,10 +18,14 @@ module.exports = class Outputer {
       afterDOMReadyDownloadTime,
       loadTime
     } = total
+
+    const {runInterval, config} = global.__hiper__, 
+          {url, count} = config
     console.log('\n')
     console.log(figlet.textSync('Hiper'))
     console.log('\n')
-    console.log(`🚀 加载 ${global.__hiper__.url} ${global.__hiper__.count} 次 用时 ${(global.__hiper__.runInterval) / 1000} s`)
+    // console.log(`🚀 加载 ${global.__hiper__.url} ${global.__hiper__.count} 次 用时 ${(global.__hiper__.runInterval) / 1000} s`)
+    console.log(`🚀 加载 ${url} ${count} 次 用时 ${(runInterval) / 1000} s`)
     console.log('\n')
     new Line()
       .padding(2)
@@ -71,5 +76,8 @@ module.exports = class Outputer {
       .fill()
       .output()
     console.log('\n')
+  }
+  async screenShot(path, picture){
+    return screenShot(path, picture)
   }
 }
