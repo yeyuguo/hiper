@@ -2,12 +2,13 @@ const figlet = require('figlet')
 const clui = require('clui')
 const clc = require('cli-color')
 const Line = clui.Line
-const screenShot = require('./screenshot')
 
 module.exports = class Outputer {
   output (data) {
     if (!data) return
-    let { total } = data
+    let {
+      total
+    } = data
     let {
       dnsTime,
       tcpTime,
@@ -19,8 +20,14 @@ module.exports = class Outputer {
       loadTime
     } = total
 
-    const {runInterval, config} = global.__hiper__, 
-          {url, count} = config
+    const {
+      runInterval,
+      config
+    } = global.__hiper__
+    const {
+      url,
+      count
+    } = config
     console.log('\n')
     console.log(figlet.textSync('Hiper'))
     console.log('\n')
@@ -76,8 +83,5 @@ module.exports = class Outputer {
       .fill()
       .output()
     console.log('\n')
-  }
-  async screenShot(path, picture){
-    return screenShot(path, picture)
   }
 }

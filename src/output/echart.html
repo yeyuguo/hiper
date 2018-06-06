@@ -1,28 +1,31 @@
 <html>
-    <head>
-        <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts-en.simple.min.js"></script>
-        <script src="https://cdn.bootcss.com/zepto/1.0rc1/zepto.min.js"></script>
-    </head>
-    <style>
-    body{
+
+<head>
+    <script src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts-en.simple.min.js"></script>
+    <script src="https://cdn.bootcss.com/zepto/1.0rc1/zepto.min.js"></script>
+</head>
+<style>
+    body {
         margin: 0 auto;
     }
-    #hiper{
+
+    #hiper {
         width: 100%;
         min-height: 700px;
         border: 1px solid #000;
     }
-    </style>
-    <body>
-        <div id="hiper"></div>
-        <script>
-            $.getJSON('./2018-06-06.json',function(data){
-                const option = render(data)
-                const myChart = echarts.init(document.getElementById('hiper'));
-                myChart.setOption(option);
-            })
-        
-        function render(data){
+</style>
+
+<body>
+    <div id="hiper"></div>
+    <script>
+        $.getJSON('../2018-06-06.json', function (data) {
+            const option = render(data)
+            const myChart = echarts.init(document.getElementById('hiper'));
+            myChart.setOption(option);
+        })
+
+        function render(data) {
             let newData = {}
             let typeTime = Object.keys({
                 "dnsTime": "0.00 ms",
@@ -40,18 +43,25 @@
                 jd:[{}],
             }
             */
-            data.forEach(function(d){
-                let { url,message } = d.description
+            data.forEach(function (d) {
+                let {
+                    url,
+                    message
+                } = d.description
                 // let _url = url.split('.com')[0].split('http://')[1]
                 // if( !_url ) _url = url.split('.com')[0].split('https://')[1]
-                let _url = /^http(s)?:\/\/(\w*\.|^\s)*(.*?)\.(com|w*)/gm.exec(url)[3]
-                console.log({_url})
-                if(!newData.hasOwnProperty(_url)){
+                let _url = /^http(s)?:\/\/(\w*\.|^\s)*(.*?)\.(com|\w*)$/gm.exec(url)[3]
+                console.log({
+                    _url
+                })
+                if (!newData.hasOwnProperty(_url)) {
                     newData[_url] = []
                 }
                 newData[_url].push(d)
             })
-            console.log({newData})
+            console.log({
+                newData
+            })
 
             /**
             [{
@@ -60,20 +70,25 @@
                 data: [18203, 23489, 29034, 104970, 131744, 630230]
             }]
             */
-            let convData = typeTime.map(function(d){
+            let convData = typeTime.map(function (d) {
                 let _data = []
-                Object.keys(newData).forEach(function(oneType){
+                Object.keys(newData).forEach(function (oneType) {
                     // console.log('dd[d]:',newData[oneType])
-                    newData[oneType].forEach(function(oneDomain){
-                        // return oneDomain[d]
+                    newData[oneType].forEach(function (oneDomain) {
                         // console.log(oneDomain[d])
-                        _data.push(oneDomain[d].split(' ms')[0])
+                        // _data.push(oneDomain[d].split(' ms')[0])
+                        const _group = /^(\d*\.\d*)(?:\s)(\w*)/.exec(oneDomain[d])
+                        let _time = _group[1]
+                        if (_group[2] == 's') {
+                            _time = _time * 1000
+                        }
+                        _data.push(_time)
                     })
                 })
                 return {
-                    name:d,
-                    type:'bar',
-                    data:_data
+                    name: d,
+                    type: 'bar',
+                    data: _data
                 }
             })
             console.log(convData)
@@ -123,6 +138,7 @@
             };
             return option
         }
-        </script>
-    </body>
+    </script>
+</body>
+
 </html>

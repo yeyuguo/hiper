@@ -4,9 +4,6 @@ const path = require('path')
 const fs = require('fs')
 const Util = require('../util')
 
-
-
-
 const {
   _args,
   version,
@@ -14,13 +11,17 @@ const {
 } = pjson
 
 module.exports = class Cli {
-  parseJSONFile (filePath) {
+  parseJSONFile(filePath) {
     filePath = path.isAbsolute(filePath) ? filePath : path.join(process.cwd(), filePath)
     let data = null
     try {
       data = JSON.parse(fs.readFileSync(filePath).toString())
       if (data) {
-        let { noCache, noJavascript, noOnline } = data
+        let {
+          noCache,
+          noJavascript,
+          noOnline
+        } = data
         data.cache = !noCache
         data.javascript = !noJavascript
         data.online = !noOnline
@@ -29,20 +30,18 @@ module.exports = class Cli {
         delete data.noOnline
       }
     } catch (error) {
-      
+
     }
     return data
   }
-  
-  
 
-  headless (b) {
+  headless(b) {
     if (b === 'true') b = true
     if (b === 'false') b = false
     return b
   }
 
-  monitor () {
+  monitor() {
     let url = null
     program
       .version(version, '-v, --version')
@@ -65,113 +64,58 @@ module.exports = class Cli {
       .parse(process.argv)
 
     let {
-      executablePath,
-      count,
-      config,
-      message, // 新添信息
-      headless,
-      useragent,
-      cache,
-      javascript,
-      online,
-      showchart, // 保存成图表
+      // executablePath,
+      // count,
+      // message, // 新添信息
+      // showchart, // 保存成图表
+      // headless,
+      // useragent,
+      // cache,
+      // javascript,
+      // online
+      config
     } = program
-    
-    if(!global.__hiper__) global.__hiper__ = {}
+
+    if (!global.__hiper__) global.__hiper__ = {}
     if (!config) config = {}
 
     url = Util.urlNormalize(url || config.url)
-    
+
     // 给cli参数赋予默认值
     let myOpts = {
-      url : url,
-      count : _args.count,
-      headless : _args.headless,
-      cache : !_args.noCache,
-      javascript : !_args.noJavascript,
-      online : !_args.noOnline,
-      useragent : config.useragent,
-      executablePath: config.executablePath, 
+      url: url,
+      count: _args.count,
+      headless: _args.headless,
+      cache: !_args.noCache,
+      javascript: !_args.noJavascript,
+      online: !_args.noOnline,
+      useragent: config.useragent,
+      executablePath: config.executablePath,
       cookies: config.cookies && !Array.isArray(config.cookies) && [config.cookies] || null,
-      viewport : config.viewport ? {
-        deviceScaleFactor : 1,
-        isMobile : false,
-        hasTouch : false,
-        isLandscape : false,
-        ...config.viewport,
-      }:null,
+      viewport: config.viewport ? {
+        deviceScaleFactor: 1,
+        isMobile: false,
+        hasTouch: false,
+        isLandscape: false,
+        ...config.viewport
+      } : null,
       ...config
     }
-    
+
     // global.__hiper__ = myOpts
     global.__hiper__.config = myOpts
     global.__hiper__.argv = program
     // console.log('global.__hiper__.argv: ', global.__hiper__.argv);
 
     return myOpts
-    /**global 配置 概览
-     * 
+    /**
+     * global 配置 概览
+     *
      globle.__hiper__ = {
        config,
        argv,
        runInterval,
      }
      */
-
-    // 给cli参数赋予默认值
-    // todo 
-    // !更改过配置，待删除
-    if (!count) {
-      count = config.count || _args.count
-    }
-
-    if (useragent == null) {
-      useragent = config.useragent
-    }
-
-    if (headless == null) {
-      headless = config.headless || _args.headless
-    }
-
-    if (cache == null) {
-      cache = config.cache || !_args.noCache
-    }
-
-    if (javascript == null) {
-      javascript = config.javascript || !_args.noJavascript
-    }
-
-    if (online == null) {
-      online = config.online || !_args.noOnline
-    }
-
-    if (executablePath == null) {
-      executablePath = config.executablePath
-    }
-
-    if (config.viewport) {
-      config.viewport.deviceScaleFactor = config.viewport.deviceScaleFactor || 1
-      config.viewport.isMobile = config.viewport.isMobile || false
-      config.viewport.hasTouch = config.viewport.hasTouch || false
-      config.viewport.isLandscape = config.viewport.isLandscape || false
-    }
-
-    if (config.cookies && !Array.isArray(config.cookies)) {
-      config.cookies = [config.cookies]
-    }
-
-    let opts = Object.assign(config, {
-      executablePath,
-      url,
-      count,
-      headless,
-      useragent,
-      cache,
-      javascript,
-      online
-    })
-    global.__hiper__ = opts
-
-    return opts
   }
 }
