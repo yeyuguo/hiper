@@ -36,6 +36,8 @@ Options:
    -u, --useragent <ua>         设置useragent
    -H, --headless [b]           是否使用无头模式（default: true）
    -e, --executablePath <path>  使用指定的chrome浏览器
+   -m, --message <description>  添加描述信息
+   -s, --showchart [b]          是否保存 chart 图 （default: false）
    --no-cache                   禁用缓存（default: false）
    --no-javascript              禁用javascript（default: false）
    --no-online                  离线模式（defalut: false）
