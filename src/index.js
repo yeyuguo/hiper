@@ -22,10 +22,16 @@ const analyzer = new Analyzer()
 const outputer = new Outputer()
 const util = new Util()
 
+
+const fs = require('fs')
 // 监听命令行
 let opts = cli.monitor()
 performance.run(opts).then(async statisticData => {
   let data = await analyzer.statistics(statisticData)
+
+  // fs.writeFileSync('chromeReqTime.txt', statisticData.toString())
+
+  // console.log('statisticData: ', statisticData);
   // console.log('data:', data)
   // console.log('global.__hiper__: ', global.__hiper__);
   const {
