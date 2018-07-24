@@ -55,6 +55,7 @@ module.exports = class Cli {
       .option('-m, --message <description>', '添加描述信息')
       .option('-u, --useragent <ua>', '设置useragent')
       .option('-e, --executablePath <path>', '使用指定的chrome浏览器')
+      .option('-a, --optionArgs <string>', '设置 args 数组,配置忽略 https 无认证（default: "" ）')
       // 判断
       .option('-H, --headless [b]', '是否使用无头模式（default: true）', this.headless)
       .option('-s, --showchart [b]', '是否保存 chart 图 （default: false）', this.headless)
@@ -64,18 +65,22 @@ module.exports = class Cli {
       .parse(process.argv)
 
     let {
-      // executablePath,
-      // count,
-      // message, // 新添信息
-      // showchart, // 保存成图表
-      // headless,
-      // useragent,
-      // cache,
-      // javascript,
-      // online
+      executablePath,
+      count,
+      message, // 新添信息
+      showchart, // 保存成图表
+      optionArgs, // 新添的 可以添加 optionArgs 参数
+      headless,
+      useragent,
+      cache,
+      javascript,
+      online,
       config
     } = program
-
+    // console.log('count:',count)
+    // console.log('optionArgs:',optionArgs)
+    // console.log('optionArgs:',optionArgs,typeof optionArgs)
+    // console.log('headless:',headless)
     if (!global.__hiper__) global.__hiper__ = {}
     if (!config) config = {}
 
@@ -99,7 +104,9 @@ module.exports = class Cli {
         isLandscape: false,
         ...config.viewport
       } : null,
-      ...config
+      ...program,
+      optionArgs:optionArgs?optionArgs:''
+
     }
 
     // global.__hiper__ = myOpts

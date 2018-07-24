@@ -72,12 +72,14 @@ module.exports = class Performance {
       cookies,
       cache,
       javascript,
-      online
+      online,
+      optionArgs
     } = opts
+    // console.log('args: ', args);
 
     let launchOpts = {
       headless,
-      args: ['--unlimited-storage', '--full-memory-crash-report']
+      args: optionArgs !== "" ? ['--unlimited-storage', '--full-memory-crash-report', optionArgs] : ['--unlimited-storage', '--full-memory-crash-report']
     }
 
     if (executablePath) {

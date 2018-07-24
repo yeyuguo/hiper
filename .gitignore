@@ -9,6 +9,8 @@ selenium-debug.log
 config.json
 exp.json
 note
+*.json
+my_readme.md
 
 # Editor directories and files
 .idea
